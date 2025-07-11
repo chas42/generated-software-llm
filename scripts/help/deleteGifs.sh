@@ -1,0 +1,1 @@
+while true; do rm -f /home/chas/Downloads/apache-jmeter-5.6.3/bin/*.gif; echo "files removed"; sleep 10; done

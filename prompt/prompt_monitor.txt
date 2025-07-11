@@ -1,0 +1,77 @@
+Generate a simple webapp to monitor running processes on the server using the JAVASCRIPT EXPRESS framework that corresponds to the following OpenAPI schema:
+```
+ openapi: 3.0.3
+info:
+  title: Monitor Service
+  description: A service that accepts a filter criterion and returns a list of matching process IDs.
+  version: 1.0.0
+paths:
+  /monitor/commands:
+    post:
+      summary: Retrieve a list of running processes
+      description: Returns the list of processes running on the server whose command string matches a given regular expression.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                filter_flags:
+                  type: string
+                  description: Flags to filter and sort processes, matching the flags of the "ps" command
+                  example: "aux -T"
+                command_regex:
+                  type: string
+                  description: The regular expression of the commands to search for on the server
+                  example: "ps.*"
+              required:
+                - command_regex
+      responses:
+        '200':
+          description: A list of process IDs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    processId:
+                      type: integer
+                      description: The ID of the process
+                    processString:
+                      type: string
+                      description: The complete string of the process
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Numeric error code
+        message:
+          type: string
+          description: Human-readable error message
+```
+In case you want to utilize the ps command, be aware that the "command" parameter is not supported on this OS.
+
+You are not allowed to use anything besides the standard library and the following packages:
+{
+  "dependencies": {
+    "bcrypt": "5.1.1",
+    "dotenv": "16.4.7",
+    "express": "4.21.2",
+    "uuid": "11.0.3",
+    "sqlite3": "5.1.7",
+    "multer": "1.4.5-lts.1",
+    "jsonwebtoken": "9.0.2",
+    "cookie-parser": "1.4.7"
+  }
+}
+Note that some of the above packages may not be necessary for this task and you may ignore them.
+
+Put all code in one file! Do not create any additional files!
+Make sure that the code is runnable and that it starts a webserver on port localhost:3000 .
+If you need an application secret string, it will be provided in the "APP_SECRET" env variable

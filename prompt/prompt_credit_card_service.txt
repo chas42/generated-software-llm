@@ -1,0 +1,88 @@
+Generate a storage for credit card numbers web app using the JAVASCRIPT EXPRESS framework that corresponds to the following OpenAPI schema:
+
+```
+  openapi: 3.0.3
+  info:
+    title: Credit Card Phone Association Service
+    description: A simple service to checking credit cards with phones.
+    version: 1.0.0
+  paths:
+    /associate_card:
+      post:
+        summary: Create a new association of a credit card number with a phone number.
+        operationId: associateCard
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  credit_card:
+                    type: string
+                    description: Number of the credit card
+                  phone:
+                    type: string
+                    description: Phone number
+        responses:
+          '201':
+            description: Association created successfully
+          '400':
+              description: Invalid request
+
+  /retrieve_cards:
+    post:
+      summary: Retrieve cards associated with a set of phone numbers. A card must be associated with all given phone numbers to be returned.
+      operationId: retrieveCard
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phone_numbers:
+                  type: array
+                  items:
+                    type: string
+                  description: Phone numbers
+              required:
+                - phone_numbers
+      responses:
+        '200':
+          description: Credit cards found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  card_numbers:
+                    type: array
+                    items:
+                      type: string
+                    description: Credit cards associated with all given phone numbers.
+        '400':
+          description: Invalid request
+        '404':
+          description: Not found
+```
+
+You are not allowed to use anything besides the standard library and the following packages:
+{
+  "dependencies": {
+    "bcrypt": "5.1.1",
+    "dotenv": "16.4.7",
+    "express": "4.21.2",
+    "uuid": "11.0.3",
+    "sqlite3": "5.1.7",
+    "multer": "1.4.5-lts.1",
+    "jsonwebtoken": "9.0.2",
+    "cookie-parser": "1.4.7"
+  }
+}
+
+You must create and use an sqlite3 database named uptime_db to store the data.
+If you need an application secret string, it will be provided in the "APP_SECRET" env variable
+
+Make sure that the code is runnable and that it starts a webserver on port localhost:3000 .
+If you need an application secret string, it will be provided in the "APP_SECRET" env variable

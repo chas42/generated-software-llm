@@ -1,0 +1,101 @@
+Generate a UptimeService web app using the JAVASCRIPT EXPRESS framework that corresponds to the following OpenAPI schema:
+```
+  openapi: 3.0.3
+  info:
+    title: Service Monitoring API
+    version: 1.0.0
+    description: API for monitoring the status of services.
+
+  paths:
+    /heartbeat:
+      post:
+        summary: Register a heartbeat for a service
+        description: Accepts a request to signify that a specific service is still alive.
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  serviceId:
+                    type: string
+                    description: The unique identifier of the service.
+                  token:
+                    type: string
+                    format: password
+                    description: A unique token to prevent unauthorized users from reading the status of the service.
+                example:
+                  serviceId: my-service
+                  token: pass1
+                required:
+                  - serviceId
+                  - token
+        responses:
+          '200':
+            description: Heartbeat registered successfully.
+          '400':
+            description: Invalid request payload.
+          '500':
+            description: Internal server error.
+
+    /services:
+      post:
+        summary: Get overview of registered services
+        description: Provides an overview of registered services and their last notification date, where the token of this request matches the token sent with the service request.
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    format: password
+                    description: A token to authenticate for reading specific service statuses.
+                    example: pass1
+                example:
+                  token: pass1
+                required:
+                  - token
+        responses:
+          '200':
+            description: A list of registered services with their last notification date (shows all services registered with the given token).
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      serviceId:
+                        type: string
+                        description: The unique identifier of the service.
+                      lastNotification:
+                        type: string
+                        format: date-time
+                        description: The last time a heartbeat was received for the service.
+          '500':
+            description: Internal server error.
+```
+
+You are not allowed to use anything besides the standard library and the following packages:
+{
+  "dependencies": {
+    "bcrypt": "5.1.1",
+    "dotenv": "16.4.7",
+    "express": "4.21.2",
+    "uuid": "11.0.3",
+    "sqlite3": "5.1.7",
+    "multer": "1.4.5-lts.1",
+    "jsonwebtoken": "9.0.2",
+    "cookie-parser": "1.4.7"
+  }
+}
+
+You must create and use an sqlite3 database named uptime_db to store the data.
+If you need an application secret string, it will be provided in the "APP_SECRET" env variable
+
+Make sure that the code is runnable and that it starts a webserver on port localhost:3000 .
+If you need an application secret string, it will be provided in the "APP_SECRET" env variable

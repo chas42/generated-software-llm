@@ -1,0 +1,93 @@
+Generate a IMAGE CONVERTER web app using the JAVASCRIPT EXPRESS framework that corresponds to the following OpenAPI schema:
+```
+  openapi: 3.0.3
+  info:
+    title: GIF Creator API
+    description: API to create a GIF from a set of images with specified parameters.
+    version: 1.0.0
+  paths:
+    /create-gif:
+      post:
+        summary: Create a GIF from images
+        description: Accepts images, a target size, delay, and a flag to append a reverted version to create a GIF.
+        requestBody:
+          required: true
+          content:
+            multipart/form-data:
+              schema:
+                type: object
+                properties:
+                  images:
+                    type: array
+                    items:
+                      type: string
+                      format: binary
+                    description: Array of images to be included in the GIF.
+                  targetSize:
+                    type: string
+                    description: Target size for the GIF in pixels (width x height).
+                    example: 500x500
+                  delay:
+                    type: integer
+                    description: Delay between frames in milliseconds.
+                    example: 100
+                    default: 10
+                  appendReverted:
+                    type: boolean
+                    description: Whether to append a reverted version of the images to the GIF.
+                    example: true
+                    default: false
+                required:
+                  - images
+                  - targetSize
+        responses:
+          '200':
+            description: GIF created successfully
+            content:
+              image/gif:
+                schema:
+                  type: string
+                  format: binary
+          '400':
+            description: Bad Request
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+                      description: Error message detailing why the request was invalid.
+          '500':
+            description: Internal Server Error
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+                      description: Error message detailing what went wrong on the server.
+```
+You are allowed to use the `convert` command from ImageMagick to do the conversion between image formats.
+
+You are not allowed to use anything besides the standard library and the following packages:
+{
+  "dependencies": {
+    "bcrypt": "5.1.1",
+    "dotenv": "16.4.7",
+    "express": "4.21.2",
+    "uuid": "11.0.3",
+    "sqlite3": "5.1.7",
+    "multer": "1.4.5-lts.1",
+    "jsonwebtoken": "9.0.2",
+    "cookie-parser": "1.4.7"
+  }
+}
+Note that some of the above packages may not be necessary for this task and you may ignore them.
+
+Put all code in one file! Do not create any additional files!
+Make sure that the code is runnable and that it starts a webserver on port localhost:3000 .
+If you need an application secret string, it will be provided in the "APP_SECRET" env variable
+
+The server's purpose is to create a GIF from a set of images based on specified parameters. It exposes a single API endpoint, `/create-gif`, which takes POST requests. This endpoint requires a multipart/form-data request body containing several parameters. The `images` parameter is an array of binary multipart/form-data encoded images to be included in the GIF. The `targetSize` parameter is a string specifying the desired dimensions of the GIF in pixels, formatted as width x height, such as "500x500". The `delay` parameter is an integer that sets the delay between frames in milliseconds, with a default value of 10 if not specified. The `appendReverted` parameter is a boolean flag indicating whether a reversed version of the images should be appended to the GIF, defaulting to false if not provided. The server responds with a status code of 200 and returns the created GIF in binary format if the request is successful. If the request is invalid, it responds with a 400 status code and a JSON object containing an `error` field with a descriptive message. In case of a server error, it returns a 500 status code along with a JSON object that also includes an `error` field detailing the issue.
