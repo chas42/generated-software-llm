@@ -1,0 +1,4 @@
+data/*.csv
+data/*.txt
+results/*.png
+results/*.csv
