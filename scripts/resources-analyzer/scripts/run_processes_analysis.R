@@ -11,7 +11,7 @@ run_processes_analysis <- function (basePath, fileName, modelName, commandString
   proccessMEM$CURRENT_TIME <- difftime(proccessMEM$CURRENT_TIME, proccessMEM$CURRENT_TIME[1], units = "hours") 
   proccessMEM <- proccessMEM %>% 
     mutate(timeInHours = as.numeric(CURRENT_TIME, units = "hours")) %>% 
-    filter(timeInHours <= 50 )
+    filter(timeInHours <= 48 )
   
   mktestProccess <- mk.test(proccessMEM$RSS)
   
@@ -20,19 +20,18 @@ run_processes_analysis <- function (basePath, fileName, modelName, commandString
     value = kb_to_gb(proccessMEM$RSS)
   )
   
-  print("Proccess Memory test start")  
   statisc_tests(dataFrameToPrint$time, dataFrameToPrint$value, "proccess", modelName)
-  print("Proccess Memory test end")
   
   process_graph <- generate_graph(
-    df = dataFrameToPrint, 
+    df = dataFrameToPrint,
+    graphTitle = "Proccess analysis",
     xLegend ="Time (hour)", 
-    yLegend = "Used Memory (GB)",
-    yStart = yStartProcess,
-    yEnd = yEndProcess,
-    yBy = 0.1
+    yLegend = "Used Memory (GB)"
+    # yStart = yStartProcess,
+    # yEnd = yEndProcess,
+    # yBy = 0.1
   )
-  graph_name <- paste(basePath,"/results/",modelName,"_","processMemoryAnalysis.png",sep = "")
+  graph_name <- paste(basePath,"/results/",modelName,"/","process-memory-analysis.png",sep = "")
   ggsave(graph_name,plot = process_graph, width = 4, height = 3)
   
   #############################################################################
@@ -52,5 +51,5 @@ run_processes_analysis <- function (basePath, fileName, modelName, commandString
     ungroup() %>% 
     slice_head(n = 5)
   
-  write.csv(GROWTH_RATE, file = paste(basePath,"/results/",modelName,"growth_rate.csv",sep = ""),row.names = FALSE)
+  write.csv(GROWTH_RATE, file = paste(basePath,"/results/",modelName,"/","process-growth_rate.csv",sep = ""),row.names = FALSE)
 }

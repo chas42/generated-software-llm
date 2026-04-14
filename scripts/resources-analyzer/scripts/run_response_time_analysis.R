@@ -1,7 +1,7 @@
-run_response_time_analysis <- function(basePath,fileName, modelname) {
+run_response_time_analysis <- function(basePath,fileName, modelName) {
   
-  print("Start generate response time graphs")
-  fileLocation <- paste0(basePath,"/data/", fileName)
+  print(paste0("Start generate response time graphs of ",modelName))
+  fileLocation <- paste0(basePath,"data/", fileName)
 
     df <- read.csv(file = fileLocation, header = TRUE, strip.white = TRUE, 
                  na.strings = "", sep = ",", stringsAsFactors = FALSE)
@@ -14,7 +14,7 @@ run_response_time_analysis <- function(basePath,fileName, modelname) {
       time = as.POSIXct(timeStamp / 1000, origin = "1970-01-01", tz = "UTC"),
       timeInHours = as.numeric(difftime(time, time[1], units = "hours")),
     ) %>%
-    filter(timeInHours <= 50 ) %>%
+    filter(timeInHours <= 48 ) %>%
     mutate(grupo_tempo = ((timeInHours - min(timeInHours)) %/% time_interval) * time_interval) %>%
     group_by(grupo_tempo) %>%
     summarise(media_valor = mean(elapsed, na.rm = TRUE)) %>%
@@ -32,9 +32,11 @@ run_response_time_analysis <- function(basePath,fileName, modelname) {
     yLegend = "Response Time (ms)"
   )
   
-  graph_name <- paste0(basePath, "/results/", "response_time_analysis_", modelname, ".png")
+  graph_name <- paste0(basePath, "/results/", modelName,"/","response-time-analysis.png")
   ggsave(graph_name, plot = graph, width = 4, height = 3)
   
+  
+  statisc_tests(df$time, df$value, "response-time", modelName)
+  
   print("End generate response time graphs")
-  # statisc_tests(dados_media$grupo_tempo, dados_media$media_valor, "responseTime", modelName)
 }

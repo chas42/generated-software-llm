@@ -1,16 +1,13 @@
 confidence_interval_slope <- function(x, y) {
   modelo <- lm(y ~ x)
-  cor_xy <- cor(x, y)
-  n <- length(x)
-  t <- qt(0.975, df = n - 2)
-  
-  slope <- coef(modelo)[2]
-  erro <- (sd(y) / sd(x)) * sqrt((1 - cor_xy^2) / (n - 2))
-  
-  slope + c(-1, 1) * t * erro
+  confint(modelo)[2, ]
 }
 
 statisc_tests <- function(x, y, testName, modelName) {
+  
+  if(length(x) < 3){
+    stop("É necessário pelo menos 3 pontos para análise.")
+  }
   
   mk <- Kendall::MannKendall(y)
   slope <- coef(lm(y ~ x))[2]
@@ -21,13 +18,14 @@ statisc_tests <- function(x, y, testName, modelName) {
     MODEL = modelName,
     P_VALUE = mk$sl,
     SLOPE = slope,
-    CONFIDENCE = paste(ic[1], ic[2]),
+    CI_LOW = ic[1],
+    CI_HIGH = ic[2],
     MEAN = mean(y)
   )
   
   write.table(
     df,
-    file = paste0("~/Documents/dados_", testName, ".csv"),
+    file = paste0(paths$base,"results/",modelName,"/","statistic-test.csv"),
     append = TRUE,
     sep = ",",
     col.names = FALSE,
