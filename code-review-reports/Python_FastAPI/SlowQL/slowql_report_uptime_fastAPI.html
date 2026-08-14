@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SlowQL Analysis Report</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #0b1120;
+      color: #e5e7eb;
+      padding: 24px;
+    }
+    h1 {
+      color: #f97316;
+      text-align: center;
+      margin-bottom: 0.25rem;
+    }
+    h2.health-score {
+        text-align: center;
+        margin-top: 0;
+    }
+    h2 {
+      color: #a855f7;
+      margin-top: 1.5rem;
+    }
+    .meta {
+      font-size: 13px;
+      color: #9ca3af;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      font-size: 13px;
+    }
+    th, td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #1f2937;
+      vertical-align: top;
+    }
+    th {
+      background: #020617;
+      color: #f9fafb;
+      text-align: left;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    tr:nth-child(even) td {
+      background: #020617;
+    }
+    .sev-critical { color: #f97373; font-weight: 600; }
+    .sev-high     { color: #fb923c; font-weight: 600; }
+    .sev-medium   { color: #22c55e; }
+    .sev-low      { color: #38bdf8; }
+    .sev-info     { color: #9ca3af; }
+    code {
+      font-family: "JetBrains Mono", "Fira Code", monospace;
+    }
+  </style>
+</head>
+<body>
+  <h1>SlowQL Analysis Report</h1>
+  <div class="meta">
+    <div>Total Issues: 0</div>
+    <h2 class="health-score">
+      Health Score: <span class="health-score-value">100</span>/100
+    </h2>
+  </div>
+
+  <h2>Detected Issues</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Severity</th>
+        <th>Rule ID</th>
+        <th>Dimension</th>
+        <th>Message</th>
+        <th>Impact</th>
+        <th>Fix</th>
+        <th>Location</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+    </tbody>
+  </table>
+</body>
+</html>

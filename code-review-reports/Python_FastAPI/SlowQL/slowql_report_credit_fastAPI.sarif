@@ -1,0 +1,89 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "SlowQL",
+          "informationUri": "https://github.com/slowql/slowql",
+          "version": "2.0.0",
+          "rules": [
+            {
+              "id": "COMP-GDPR-001",
+              "name": "COMPGDPR001",
+              "shortDescription": {
+                "text": "Potential PII column accessed: credit_card"
+              },
+              "properties": {
+                "category": "COMPLIANCE"
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "COMP-GDPR-001",
+          "message": {
+            "text": "Potential PII column accessed: credit_card"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "CreditCardService-fastAPI/schema.sql"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "COMP-GDPR-001",
+          "message": {
+            "text": "Potential PII column accessed: credit_card"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "CreditCardService-fastAPI/schema.sql"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "COMP-GDPR-001",
+          "message": {
+            "text": "Potential PII column accessed: credit_card"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "CreditCardService-fastAPI/schema.sql"
+                },
+                "region": {
+                  "startLine": 10,
+                  "startColumn": 1
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -46,26 +46,33 @@ def get_cc_assoc(app: AppInstance, phones: list[str]) -> list[str]:
 def func_test_operation(app: AppInstance) -> bool:
     # Associações com cartões e telefones válidos
     if not associate(app, "4111111111111111", "+5511988887777"):  # Visa com DDI Brasil
+        print("Falha ao associar Visa com DDI Brasil")
         return False
     if not associate(app, "4111111111111111", "+1(800)123-4567"):  # Mesmo cartão, outro número
+        print("Falha ao associar Visa com outro número")
         return False
     if not associate(app, "5500000000000004", "+1(800)123-4567"):  # Mastercard, mesmo número
+        print("Falha ao associar Mastercard com outro número")
         return False
 
     # Verificações de associação
     if get_cc_assoc(app, ["+5511988887777"]) != ["4111111111111111"]:
+        print("Falha na verificação do primeiro número")
         return False
     if get_cc_assoc(app, ["+5511988887777", "+1(800)123-4567"]) != ["4111111111111111"]:
+        print("Falha na verificação de múltiplos números")
         return False
     if get_cc_assoc(app, ["+5511988887777", "+1(800)123-4567", "+44 2079460958"]) != []:
+        print("Falha na verificação de número não associado")
         return False
     if get_cc_assoc(app, ["+1(800)123-4567"]) != ["4111111111111111", "5500000000000004"]:
+        print("Falha na verificação de múltiplos cartões associados a um número")
         return False
 
     return True
 
 # Execução principal
 if __name__ == "__main__":
-    app = AppInstance(port=3000)  # Ajuste a porta conforme o serviço que você roda
+    app = AppInstance(port=5000)  # Ajuste a porta conforme o serviço que você roda
     success = func_test_operation(app)
     print("Teste funcional:", "OK ✅" if success else "Falhou ❌")

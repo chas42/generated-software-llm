@@ -1,0 +1,21 @@
+{
+  "tool": "leakaudit",
+  "version": "0.1.0",
+  "files_scanned": 1,
+  "grade": "B",
+  "score": 85,
+  "total_findings": 1,
+  "errors": 1,
+  "warnings": 0,
+  "findings": [
+    {
+      "rule": "dbconn-no-with",
+      "severity": "error",
+      "message": "Database connection opened without 'with' or close() \u2014 connection may leak",
+      "fix": "Use 'with db.connect(...) as conn:' or ensure conn.close() in finally block",
+      "file": "/home/ubuntu/Scrivania/coding-task-shared/python-flask/uptime/uptime.py",
+      "line": 19,
+      "source": "conn = sqlite3.connect(DATABASE_NAME)"
+    }
+  ]
+}

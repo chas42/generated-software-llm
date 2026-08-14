@@ -1,0 +1,5 @@
+imageio==2.34.0
+flask==3.0.0
+flask-cors==4.0.0
+werkzeug==3.0.1
+opencv-python==4.13.0.92

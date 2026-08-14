@@ -1,6 +1,19 @@
 # ============================
 # Dependências do projeto
 # ============================
+install.packages("trend")
+install.packages("knitr")
+install.packages("dplyr")
+install.packages("ggplot2")
+install.packages("gridExtra")
+install.packages("Kendall")
+install.packages("data.table")
+install.packages("DBI")
+install.packages("duckdb")
+
+
+library(DBI)
+library(duckdb)
 library(trend)
 library(knitr)
 library(dplyr)
@@ -8,7 +21,6 @@ library(ggplot2)
 library(gridExtra)
 library(Kendall)
 library(data.table)
-
 # ============================
 # Carregar funções
 # ============================

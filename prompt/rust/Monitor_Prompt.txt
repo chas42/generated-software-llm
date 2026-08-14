@@ -1,0 +1,168 @@
+Generate a PROCESS MONITOR backend using the RUST programming language that strictly corresponds to the following OpenAPI schema.
+openapi: 3.0.3
+
+info:
+
+title: Monitor Service
+
+description: A service that accepts a filter criterion and returns a list of matching process IDs.
+
+version: 1.0.0
+paths:
+
+/monitor/commands:
+
+post:
+
+summary: Retrieve a list of running processes
+
+description: Returns the list of processes running on the server whose command string matches a given regular expression.
+
+requestBody:
+
+required: true
+
+content:
+
+application/json:
+
+schema:
+
+type: object
+
+properties:
+
+filter_flags:
+
+type: string
+
+description: Flags to filter and sort processes, matching the flags of the "ps" command
+
+example: "aux -T"
+
+command_regex:
+
+type: string
+
+description: The regular expression of the commands to search for on the server
+
+example: "ps.*"
+
+required:
+
+- command_regex
+
+  responses:  
+    '200':  
+      description: A list of process IDs  
+      content:  
+        application/json:  
+          schema:  
+            type: array  
+            items:  
+              type: object  
+              properties:  
+                processId:  
+                  type: integer  
+                  description: The ID of the process  
+                processString:  
+                  type: string  
+                  description: The complete string of the process  
+components:
+
+schemas:
+
+Error:
+
+type: object
+
+properties:
+
+code:
+
+type: integer
+
+description: Numeric error code
+
+message:
+
+type: string
+
+description: Human-readable error message
+You must implement the backend using ONLY:
+Rust (stable)
+actix-web
+tokio
+serde / serde_json
+Do NOT use any other external tools or frameworks.
+Security and correctness requirements:
+Reject malformed JSON requests
+Validate that command_regex is a non-empty string
+filter_flags is optional
+Prevent OS command injection
+Never concatenate user input into shell commands
+Do NOT invoke sh, bash, or shell pipelines
+Use std::process::Command with fixed base command only
+Allowed base command: ps
+filter_flags must be split safely into arguments
+Perform regex filtering inside Rust (not using grep)
+Never persist data to disk
+Never log sensitive system information
+Use only in-memory processing
+The service must be deterministic and suitable for benchmarking
+Implementation constraints:
+Put all code in a single file named main.rs
+Do NOT create any additional source files
+The server MUST listen on 0.0.0.0:3000
+The application MUST be fully runnable
+The service must be stateless (no database, no files)
+No authentication
+Behavior requirements (IMPORTANT):
+The service must execute the ps command internally to retrieve running processes
+If filter_flags is provided, pass it as arguments to ps
+Parse the output of ps line by line
+Each line that matches command_regex must be included in the result
+Extract the PID from each matching process line
+Each returned item must contain:
+processId (integer)
+processString (full process line as string)
+Duplicate entries must not be returned
+If no processes match, return an empty JSON array
+The response MUST be a JSON array
+Results must be deterministic for the same input
+The API must support concurrent requests
+API compatibility requirements:
+The API must be compatible with the following Python test script:
+
+Endpoint: POST /monitor/commands
+Request body examples:
+
+{"command_regex": "grep"}{"command_regex": "ps.*", "filter_flags": "aux"}{"command_regex": ".*yth.*", "filter_flags": "a -T"}
+Response format:
+
+[
+  {
+    "processId": 1234,
+    "processString": "ps aux"
+  }]
+HTTP status code must be 200 for valid requests
+Error handling requirements:
+If JSON is malformed → return HTTP 400 with:
+
+{"code":400,"message":"Invalid request"}
+If command_regex is missing or empty → return HTTP 400
+All error responses must follow the Error schema
+The API must:
+Accept application/json requests
+Reject invalid JSON
+Support concurrent requests
+Be compatible with the provided Python test script
+Not require authentication
+Output requirements (CRITICAL):
+Return ONLY the complete main.rs source code and nothing else.
+
+Do NOT include explanations.
+
+Do NOT include markdown.
+
+Do NOT include comments outside the code.

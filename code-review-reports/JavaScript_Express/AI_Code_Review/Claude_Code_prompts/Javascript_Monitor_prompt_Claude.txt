@@ -1,0 +1,115 @@
+ROLE: You are the orchestrating Claude Code session. You do not perform the
+analysis yourself — you only dispatch subagents and assemble their output.
+
+SCOPE
+Target directory:
+  coding-task-shared/javascript/project-bolt-monitor
+
+HARD CONSTRAINTS (apply to you and to every subagent you spawn)
+- Read-only code review: do not execute code, commands, tests, workloads,
+  databases, or the application. Do not modify any file.
+- Use only Read, Grep, and Glob. Do not invoke Bash, Write, Edit, or any other non-read-only tool.
+- Do not propose fixes, refactors, or remediation of any kind. Findings only.
+- Ignore security, style, documentation, maintainability, and refactoring
+  issues unless they have a direct runtime performance consequence.
+
+PHASE 1 — Independent fault detection (broad scope, deliberately overlapping)
+Launch both Phase-1 subagents concurrently before awaiting either result,
+and keep their contexts and outputs isolated.
+
+  - @agent-voltagent-qa-sec:code-reviewer
+  - @agent-voltagent-lang:node-specialist
+
+Give each subagent this shared task brief, adapted to its specialty:
+
+  "Perform a read-only code review of coding-task-shared/javascript/project-bolt-monitor
+  reasoning about runtime behavior and execution paths without executing
+  any code. Identify software faults with plausible
+  runtime consequences involving correctness, resource lifecycle, shared
+  state, concurrency, asynchronous execution, database, I/O handling, or
+  application performance. Ignore security, style, documentation,
+  maintainability, and refactoring issues unless they have a direct runtime
+  performance consequence. Do not modify anything, run anything, or propose
+  fixes. If the finding limit is exceeded, prioritize by severity, confidence,
+  runtime reachability, and directness of code evidence."
+
+  - code-reviewer: general-purpose fault review.
+  - node-specialist: independent review specifically through JavaScript, Node.js, V8, and Express semantics
+   (application startup and shutdown, middleware and request/response lifecycle, event-loop usage,
+   promises and asynchronous execution, timers and background tasks, EventEmitter listeners,
+   streams and buffering, closures and unintended object retention, module-level caches and
+   collections, database clients and connection pools, sockets, worker threads and child processes,
+   garbage-collection reachability, resource cleanup, and request-scoped vs process-wide state).
+
+
+Each subagent must return at most 6 findings, IDs "CR-1..CR-6" or
+"NS-1..NS-6", and for each finding include exactly:
+  - ID, file, and exact line range
+  - fault and direct code evidence (cite lines, do not paraphrase away
+    the specifics)
+  - relevant execution path
+  - affected state or resource
+  - triggering conditions
+  - existing cleanup, lifecycle, or bounding logic, and why it is/isn't
+    sufficient
+  - plausible runtime consequence
+  - severity (low/med/high) and confidence (low/med/high)
+  - assumptions that would need runtime/profiling validation
+
+Do not summarize, interpret, or merge these two outputs yourself. Hold them
+as raw handoffs.
+
+PHASE 2 — Performance and aging adjudication
+Once BOTH handoffs from Phase 1 are complete, dispatch:
+
+  - @agent-voltagent-qa-sec:performance-engineer
+
+Pass it the full, verbatim, unedited content of both handoffs (CR-* and
+NS-* findings) — do not summarize, filter, pre-rank, or note where the two
+reviewers agreed/disagreed. Instruct it explicitly:
+
+  "Treat every finding, severity, confidence rating, and any apparent
+  agreement between the two reviewers as an unconfirmed hypothesis. Verify
+  each finding strictly against the cited code and its directly relevant
+  execution paths only. Do not perform a new repository-wide review.
+
+  For each finding, determine:
+  - static validity: confirmed / qualified / rejected
+  - standalone or merged (if merged, list all contributing CR-*/NS-* IDs)
+  - performance relevance: direct / conditional / none
+  - affected resource, triggering conditions, existing cleanup, and bounds
+  - what is direct code evidence vs. a runtime-, framework-, environment-,
+    or workload-dependent assumption
+  - mechanism class: cumulative resource retention / finite-resource
+    exhaustion / transient or repeated overhead / no performance impact /
+    unsupported
+  - aging relevance: static aging mechanism supported / conditionally
+    plausible aging mechanism / non-aging performance fault / unrelated
+    to performance / unsupported
+  - final severity and final confidence
+
+  An aging mechanism requires: a repeatable trigger, persistent
+  accumulation or progressive exhaustion, insufficient cleanup or bounding,
+  and plausible degradation during long-running execution. Findings missing
+  any of these four elements cannot be classified as a supported aging
+  mechanism, regardless of severity.
+
+  If, while verifying the cited code, you notice an additional
+  aging-relevant issue not raised by either reviewer, list it separately
+  under 'SELF-SOURCED — UNVALIDATED' (max 2 items). Do not actively search
+  for these and do not include them in the confirmed/qualified consolidated
+  findings, since they have not been cross-checked by an independent
+  reviewer.
+
+  Return a final report with at most 6 consolidated findings (plus the
+  optional self-sourced section), prioritizing confirmed and qualified
+  findings with direct or conditional performance relevance. Do not claim
+  that static analysis empirically confirms software aging — frame
+  conclusions as static-analysis hypotheses requiring runtime confirmation."
+
+OUTPUT TO ME
+After Phase 2 completes, show me:
+  1. The performance-engineer's final consolidated report, verbatim
+     (including the self-sourced section if present).
+  2. The two raw Phase-1 handoffs (CR-* and NS-*) as an appendix, unedited.
+Do not add your own commentary, ranking, or summary on top of these.

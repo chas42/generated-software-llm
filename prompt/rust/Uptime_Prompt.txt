@@ -1,0 +1,189 @@
+Generate a SERVICE MONITORING backend using the RUST programming language that strictly corresponds to the following OpenAPI schema.
+openapi: 3.0.3
+
+info:
+
+title: Service Monitoring API
+
+version: 1.0.0
+
+description: API for monitoring the status of services.
+paths:
+
+/heartbeat:
+
+post:
+
+summary: Register a heartbeat for a service
+
+description: Accepts a request to signify that a specific service is still alive.
+
+requestBody:
+
+required: true
+
+content:
+
+application/json:
+
+schema:
+
+type: object
+
+properties:
+
+serviceId:
+
+type: string
+
+description: The unique identifier of the service.
+
+token:
+
+type: string
+
+format: password
+
+description: A unique token to prevent unauthorized users from reading the status of the service.
+
+required:
+
+- serviceId
+
+- token
+
+  responses:  
+    '200':  
+      description: Heartbeat registered successfully.  
+    '400':  
+      description: Invalid request payload.  
+    '500':  
+      description: Internal server error.  
+/services:
+
+post:
+
+summary: Get overview of registered services
+
+description: Provides an overview of registered services and their last notification date, where the token of this request matches the token sent with the service request.
+
+requestBody:
+
+required: true
+
+content:
+
+application/json:
+
+schema:
+
+type: object
+
+properties:
+
+token:
+
+type: string
+
+format: password
+
+description: A token to authenticate for reading specific service statuses.
+
+required:
+
+- token
+
+  responses:  
+    '200':  
+      description: A list of registered services with their last notification date.  
+      content:  
+        application/json:  
+          schema:  
+            type: array  
+            items:  
+              type: object  
+              properties:  
+                serviceId:  
+                  type: string  
+                lastNotification:  
+                  type: string  
+                  format: date-time  
+
+    '500':  
+      description: Internal server error.  
+You must implement the backend using ONLY:
+Rust (stable)
+actix-web
+tokio
+serde / serde_json
+Do NOT use any other external tools or frameworks.
+Security and correctness requirements:
+Reject malformed JSON requests
+Validate that serviceId is a non-empty string
+Validate that token is a non-empty string
+Never log or persist tokens to disk
+Never persist data outside memory
+Use thread-safe in-memory storage
+Prevent unauthorized access to services by token isolation
+The service must be deterministic and suitable for benchmarking
+Implementation constraints:
+Put all code in a single file named main.rs
+Do NOT create any additional source files
+The server MUST listen on 0.0.0.0:3000
+The application MUST be fully runnable
+The service must keep state in memory only (no database, no files)
+No authentication framework
+No external storage
+Behavior requirements (IMPORTANT):
+/heartbeat must store or update the last notification time for the given (serviceId, token) pair
+A service is uniquely identified by the combination of serviceId and token
+Multiple services may share the same serviceId with different tokens
+Multiple services may share the same token with different serviceIds
+/services must return ONLY the services registered with the given token
+For each returned service, include:
+serviceId
+lastNotification (ISO 8601 date-time string)
+If no services exist for a token, return an empty JSON array
+Duplicate heartbeats must update the timestamp, not create duplicates
+Returned services must be sorted lexicographically by serviceId
+The API must support concurrent requests
+API compatibility requirements:
+The API must be compatible with the following Python test script:
+Requests to:
+
+
+POST /heartbeat
+POST /services
+Request examples:
+
+
+{"serviceId":"svc1","token":"pass1"}{"token":"pass1"}
+Response format for /services:
+
+
+[
+  {
+    "serviceId": "svc1",
+    "lastNotification": "2026-02-02T14:22:10Z"
+  }]
+HTTP status code must be 200 for valid requests
+Requests with invalid JSON must return 400
+Error handling requirements:
+If JSON is malformed → return HTTP 400
+If required fields are missing or empty → return HTTP 400
+Internal errors → return HTTP 500
+Error responses must be JSON
+The API must:
+Accept application/json requests
+Support concurrent requests
+Be compatible with the provided Python test script
+Not require authentication
+Not use query parameters (only JSON body)
+Output requirements (CRITICAL):
+Return ONLY the complete main.rs source code and nothing else.
+
+Do NOT include explanations.
+
+Do NOT include markdown.
+
+Do NOT include comments outside the code.

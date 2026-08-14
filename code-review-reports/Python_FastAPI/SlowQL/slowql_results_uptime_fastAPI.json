@@ -1,0 +1,71 @@
+{
+  "issues": [],
+  "statistics": {
+    "total_queries": 2,
+    "total_issues": 0,
+    "by_severity": {
+      "critical": 0,
+      "high": 0,
+      "medium": 0,
+      "low": 0,
+      "info": 0
+    },
+    "by_dimension": {
+      "security": 0,
+      "performance": 0,
+      "reliability": 0,
+      "compliance": 0,
+      "cost": 0,
+      "quality": 0,
+      "schema": 0,
+      "data": 0,
+      "migration": 0,
+      "operational": 0,
+      "business": 0
+    },
+    "analysis_time_ms": 0.0,
+    "parse_time_ms": 3.0637959998784936,
+    "max_complexity": 0,
+    "avg_complexity": 0.0
+  },
+  "dialect": "sqlite",
+  "queries": [
+    {
+      "raw": "CREATE TABLE heartbeats (\n                    service_id TEXT NOT NULL,\n                    token TEXT NOT NULL,\n                    last_notification TEXT NOT NULL,\n                    PRIMARY KEY (service_id, token)\n                );",
+      "normalized": "CREATE TABLE heartbeats (\n  service_id TEXT NOT NULL,\n  token TEXT NOT NULL,\n  last_notification TEXT NOT NULL,\n  PRIMARY KEY (service_id, token)\n)",
+      "dialect": "sqlite",
+      "location": {
+        "line": 1,
+        "column": 1,
+        "end_line": null,
+        "end_column": null,
+        "file": "UptimeService-fastAPI/schema.sql",
+        "query_index": 0
+      },
+      "query_type": "CREATE",
+      "complexity_score": 10,
+      "complexity_trend": null,
+      "source_context": "ddl_schema"
+    },
+    {
+      "raw": "CREATE INDEX idx_heartbeats_token ON heartbeats(token);",
+      "normalized": "CREATE INDEX idx_heartbeats_token ON heartbeats(token)",
+      "dialect": "sqlite",
+      "location": {
+        "line": 7,
+        "column": 1,
+        "end_line": null,
+        "end_column": null,
+        "file": "UptimeService-fastAPI/schema.sql",
+        "query_index": 1
+      },
+      "query_type": "CREATE",
+      "complexity_score": 10,
+      "complexity_trend": null,
+      "source_context": "ddl_schema"
+    }
+  ],
+  "timestamp": "2026-06-08T16:39:10.685720+00:00",
+  "version": "2.0.0",
+  "config_hash": "5563dd2496fa2c08"
+}

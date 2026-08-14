@@ -1,0 +1,120 @@
+Generate a CREDIT CARD ASSOCIATION backend using the RUST programming language
+that strictly corresponds to the following OpenAPI schema.
+
+openapi: 3.0.3
+info:
+  title: Credit Card Association API
+  description: API to associate credit card numbers with phone numbers and retrieve associations.
+  version: 1.0.0
+
+paths:
+  /associate_card:
+    post:
+      summary: Associate a credit card with a phone number
+      description: Stores an association between a credit card number and a phone number.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                credit_card:
+                  type: string
+                  example: "4111111111111111"
+                phone:
+                  type: string
+                  example: "+5511988887777"
+              required:
+                - credit_card
+                - phone
+      responses:
+        '200':
+          description: Association created successfully
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+  /retrieve_cards:
+    post:
+      summary: Retrieve credit cards associated with phone numbers
+      description: Returns the list of credit card numbers associated with the given phone numbers.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phone_numbers:
+                  type: array
+                  items:
+                    type: string
+                  example: ["+5511988887777", "+1(800)123-4567"]
+              required:
+                - phone_numbers
+      responses:
+        '200':
+          description: List of associated credit cards
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  card_numbers:
+                    type: array
+                    items:
+                      type: string
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+You must implement the backend using ONLY:
+- Rust (stable)
+- actix-web
+- tokio
+- serde / serde_json
+
+Do NOT use any other external tools or frameworks.
+
+Security and correctness requirements:
+- Validate credit card number format (basic length and digits only)
+- Never log or persist sensitive data outside memory
+- Validate that phone numbers are non-empty strings
+- Reject malformed JSON requests
+- Use thread-safe in-memory storage
+- The service must be deterministic and suitable for benchmarking
+
+Implementation constraints:
+- Put all code in a single file named main.rs
+- Do NOT create any additional source files
+- The server MUST listen on 0.0.0.0:3000
+- The application MUST be fully runnable
+- The service must keep state in memory only (no database)
+
+Behavior requirements (IMPORTANT):
+- A credit card can be associated with multiple phone numbers
+- A phone number can be associated with multiple credit cards
+- If ANY phone number in /retrieve_cards has no association, return an empty list
+- Returned card_numbers MUST be sorted lexicographically
+- Duplicate associations must not create duplicate entries
+
+The API must:
+- Accept application/json requests
+- Support concurrent requests
+- Be compatible with the provided Python test script
+- Not require authentication
+
+Return ONLY the complete main.rs source code and nothing else.

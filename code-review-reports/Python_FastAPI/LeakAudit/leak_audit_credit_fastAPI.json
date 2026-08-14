@@ -1,0 +1,11 @@
+{
+  "tool": "leakaudit",
+  "version": "0.1.0",
+  "files_scanned": 1,
+  "grade": "A+",
+  "score": 100,
+  "total_findings": 0,
+  "errors": 0,
+  "warnings": 0,
+  "findings": []
+}

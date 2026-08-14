@@ -1,0 +1,169 @@
+{
+  "issues": [
+    {
+      "rule_id": "COMP-GDPR-001",
+      "message": "Potential PII column accessed: credit_card",
+      "severity": "medium",
+      "dimension": "compliance",
+      "category": "gdpr",
+      "location": {
+        "line": 1,
+        "column": 1,
+        "end_line": null,
+        "end_column": null,
+        "file": "CreditCardService-fastAPI/schema.sql",
+        "query_index": 0
+      },
+      "snippet": "credit_card",
+      "fix": null,
+      "impact": "Accessing PII requires audit logging and strict access controls under GDPR/CCPA.",
+      "documentation_url": "https://slowql.dev/rules/comp-gdpr-001",
+      "tags": [],
+      "metadata": {}
+    },
+    {
+      "rule_id": "COMP-GDPR-001",
+      "message": "Potential PII column accessed: credit_card",
+      "severity": "medium",
+      "dimension": "compliance",
+      "category": "gdpr",
+      "location": {
+        "line": 1,
+        "column": 1,
+        "end_line": null,
+        "end_column": null,
+        "file": "CreditCardService-fastAPI/schema.sql",
+        "query_index": 0
+      },
+      "snippet": "credit_card",
+      "fix": null,
+      "impact": "Accessing PII requires audit logging and strict access controls under GDPR/CCPA.",
+      "documentation_url": "https://slowql.dev/rules/comp-gdpr-001",
+      "tags": [],
+      "metadata": {}
+    },
+    {
+      "rule_id": "COMP-GDPR-001",
+      "message": "Potential PII column accessed: credit_card",
+      "severity": "medium",
+      "dimension": "compliance",
+      "category": "gdpr",
+      "location": {
+        "line": 10,
+        "column": 1,
+        "end_line": null,
+        "end_column": null,
+        "file": "CreditCardService-fastAPI/schema.sql",
+        "query_index": 3
+      },
+      "snippet": "credit_card",
+      "fix": null,
+      "impact": "Accessing PII requires audit logging and strict access controls under GDPR/CCPA.",
+      "documentation_url": "https://slowql.dev/rules/comp-gdpr-001",
+      "tags": [],
+      "metadata": {}
+    }
+  ],
+  "statistics": {
+    "total_queries": 4,
+    "total_issues": 3,
+    "by_severity": {
+      "critical": 0,
+      "high": 0,
+      "medium": 3,
+      "low": 0,
+      "info": 0
+    },
+    "by_dimension": {
+      "security": 0,
+      "performance": 0,
+      "reliability": 0,
+      "compliance": 3,
+      "cost": 0,
+      "quality": 0,
+      "schema": 0,
+      "data": 0,
+      "migration": 0,
+      "operational": 0,
+      "business": 0
+    },
+    "analysis_time_ms": 0.0,
+    "parse_time_ms": 5.562310999721376,
+    "max_complexity": 0,
+    "avg_complexity": 0.0
+  },
+  "dialect": "sqlite",
+  "queries": [
+    {
+      "raw": "CREATE TABLE associations (\n                id INTEGER PRIMARY KEY AUTOINCREMENT,\n                credit_card TEXT NOT NULL,\n                phone TEXT NOT NULL,\n                created_at TEXT NOT NULL DEFAULT (datetime('now')),\n                UNIQUE(credit_card, phone)\n            );",
+      "normalized": "CREATE TABLE associations (\n  id INTEGER PRIMARY KEY AUTOINCREMENT,\n  credit_card TEXT NOT NULL,\n  phone TEXT NOT NULL,\n  created_at TEXT NOT NULL DEFAULT (\n    DATETIME('now')\n  ),\n  UNIQUE (\n    credit_card,\n    phone\n  )\n)",
+      "dialect": "sqlite",
+      "location": {
+        "line": 1,
+        "column": 1,
+        "end_line": null,
+        "end_column": null,
+        "file": "CreditCardService-fastAPI/schema.sql",
+        "query_index": 0
+      },
+      "query_type": "CREATE",
+      "complexity_score": 30,
+      "complexity_trend": null,
+      "source_context": "ddl_schema"
+    },
+    {
+      "raw": "CREATE TABLE sqlite_sequence(name,seq);",
+      "normalized": "CREATE TABLE sqlite_sequence (\n  name,\n  seq\n)",
+      "dialect": "sqlite",
+      "location": {
+        "line": 8,
+        "column": 1,
+        "end_line": null,
+        "end_column": null,
+        "file": "CreditCardService-fastAPI/schema.sql",
+        "query_index": 1
+      },
+      "query_type": "CREATE",
+      "complexity_score": 10,
+      "complexity_trend": null,
+      "source_context": "ddl_schema"
+    },
+    {
+      "raw": "CREATE INDEX idx_assoc_phone ON associations(phone);",
+      "normalized": "CREATE INDEX idx_assoc_phone ON associations(phone)",
+      "dialect": "sqlite",
+      "location": {
+        "line": 9,
+        "column": 1,
+        "end_line": null,
+        "end_column": null,
+        "file": "CreditCardService-fastAPI/schema.sql",
+        "query_index": 2
+      },
+      "query_type": "CREATE",
+      "complexity_score": 10,
+      "complexity_trend": null,
+      "source_context": "ddl_schema"
+    },
+    {
+      "raw": "CREATE INDEX idx_assoc_card ON associations(credit_card);",
+      "normalized": "CREATE INDEX idx_assoc_card ON associations(credit_card)",
+      "dialect": "sqlite",
+      "location": {
+        "line": 10,
+        "column": 1,
+        "end_line": null,
+        "end_column": null,
+        "file": "CreditCardService-fastAPI/schema.sql",
+        "query_index": 3
+      },
+      "query_type": "CREATE",
+      "complexity_score": 20,
+      "complexity_trend": null,
+      "source_context": "ddl_schema"
+    }
+  ],
+  "timestamp": "2026-06-08T16:50:37.878961+00:00",
+  "version": "2.0.0",
+  "config_hash": "2f75ddf6ad4f4c1d"
+}

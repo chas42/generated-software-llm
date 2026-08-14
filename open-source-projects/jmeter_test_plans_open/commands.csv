@@ -1,0 +1,20 @@
+grep
+grep aux
+grep a
+grep x
+grep a -T
+ps.*
+ps.* aux
+ps.* a
+ps.* x
+ps.* a -T
+grep.*
+grep.* aux
+grep.* a
+grep.* x
+grep.* a -T
+.*yth.*
+.*yth.* aux
+.*yth.* a
+.*yth.* x
+.*yth.* a -T
